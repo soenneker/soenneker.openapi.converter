@@ -1,28 +1,27 @@
 using System.Threading.Tasks;
-using Soenneker.Facts.Local;
+using Soenneker.Tests.Attributes.Local;
 using Soenneker.OpenApi.Converter.Abstract;
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.OpenApi.Converter.Tests;
 
-[Collection("Collection")]
-public sealed class OpenApiConverterTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public sealed class OpenApiConverterTests : HostedUnitTest
 {
     private readonly IOpenApiConverter _util;
 
-    public OpenApiConverterTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public OpenApiConverterTests(Host host) : base(host)
     {
         _util = Resolve<IOpenApiConverter>(true);
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
 
     }
 
-    [LocalFact]
+    [LocalOnly]
     public async ValueTask ConvertFile_should_convert()
     {
         await _util.ConvertFile("C:\\Users\\jake\\AppData\\Local\\Temp\\temp_5cb4a53cdcd74d28a370ce4f6fd9e803\\openapi2.json",
