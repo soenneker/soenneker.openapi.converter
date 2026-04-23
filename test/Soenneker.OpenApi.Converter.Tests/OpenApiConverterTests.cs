@@ -25,6 +25,7 @@ public sealed class OpenApiConverterTests : HostedUnitTest
     public async ValueTask ConvertFile_should_convert()
     {
         await _util.ConvertFile("C:\\Users\\jake\\AppData\\Local\\Temp\\temp_5cb4a53cdcd74d28a370ce4f6fd9e803\\openapi2.json",
-            "C:\\Users\\jake\\AppData\\Local\\Temp\\temp_5cb4a53cdcd74d28a370ce4f6fd9e803\\openapi3.json", cancellationToken: CancellationToken);
+            "C:\\Users\\jake\\AppData\\Local\\Temp\\temp_5cb4a53cdcd74d28a370ce4f6fd9e803\\openapi3.json", cancellationToken: System.Threading.CancellationToken.None);
     }
 }
+
