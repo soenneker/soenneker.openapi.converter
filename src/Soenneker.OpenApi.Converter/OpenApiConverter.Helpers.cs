@@ -4,6 +4,9 @@ using System.Text.Json.Nodes;
 
 namespace Soenneker.OpenApi.Converter;
 
+/// <summary>
+/// Represents the open api converter.
+/// </summary>
 public sealed partial class OpenApiConverter
 {
     private string[] ResolveEffectiveConsumesValues(JsonObject sourceRoot, JsonObject? pathItem, JsonObject? operationObject)

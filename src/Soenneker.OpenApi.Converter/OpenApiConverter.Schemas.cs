@@ -5,6 +5,9 @@ using System.Threading;
 
 namespace Soenneker.OpenApi.Converter;
 
+/// <summary>
+/// Represents the open api converter.
+/// </summary>
 public sealed partial class OpenApiConverter
 {
     private JsonNode? ConvertSchemaNode(JsonNode? schemaNode, CancellationToken cancellationToken)
