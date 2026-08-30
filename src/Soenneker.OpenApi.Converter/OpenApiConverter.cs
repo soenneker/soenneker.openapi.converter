@@ -15,7 +15,6 @@ using Soenneker.Extensions.String;
 
 namespace Soenneker.OpenApi.Converter;
 
-/// <inheritdoc cref="IOpenApiConverter"/>
 public sealed partial class OpenApiConverter : IOpenApiConverter
 {
     private const string _defaultBodyMediaType = "application/json";

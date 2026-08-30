@@ -6,7 +6,7 @@ using Soenneker.Utils.File.Registrars;
 namespace Soenneker.OpenApi.Converter.Registrars;
 
 /// <summary>
-/// A .NET converter for OpenAPI 2 (Swagger) to OpenAPI 3
+/// Registers the Swagger 2.0 to OpenAPI 3.0 converter.
 /// </summary>
 public static class OpenApiConverterRegistrar
 {
