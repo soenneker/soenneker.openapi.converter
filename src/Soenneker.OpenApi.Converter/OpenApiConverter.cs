@@ -11,6 +11,7 @@ using Soenneker.Extensions.Task;
 using Soenneker.Extensions.ValueTask;
 using Soenneker.OpenApi.Converter.Abstract;
 using Soenneker.Utils.File.Abstract;
+using Soenneker.Utils.MemoryStream.Abstract;
 using Soenneker.Extensions.String;
 
 namespace Soenneker.OpenApi.Converter;
@@ -29,10 +30,12 @@ public sealed partial class OpenApiConverter : IOpenApiConverter
     };
 
     private readonly IFileUtil _fileUtil;
+    private readonly IMemoryStreamUtil _memoryStreamUtil;
 
-    public OpenApiConverter(IFileUtil fileUtil)
+    public OpenApiConverter(IFileUtil fileUtil, IMemoryStreamUtil memoryStreamUtil)
     {
         _fileUtil = fileUtil;
+        _memoryStreamUtil = memoryStreamUtil;
     }
 
     public async ValueTask<string> Convert(string swaggerJson, CancellationToken cancellationToken = default)
@@ -50,7 +53,7 @@ public sealed partial class OpenApiConverter : IOpenApiConverter
         JsonObject targetRoot = BuildRootOpenApiDocument(sourceRoot, cancellationToken);
         RewriteRefsRecursively(targetRoot);
 
-        OpenApiDocument document = await BuildOpenApiDocument(targetRoot)
+        OpenApiDocument document = await BuildOpenApiDocument(targetRoot, cancellationToken)
             .NoSync();
         return await SerializeOpenApiDocument(document)
             .NoSync();
@@ -103,11 +106,11 @@ public sealed partial class OpenApiConverter : IOpenApiConverter
             throw new NotSupportedException($"Only Swagger 2.0 documents are supported. Found '{swaggerVersion}'.");
     }
 
-    private static async ValueTask<OpenApiDocument> BuildOpenApiDocument(JsonObject targetRoot)
+    private async ValueTask<OpenApiDocument> BuildOpenApiDocument(JsonObject targetRoot, CancellationToken cancellationToken)
     {
         string json = targetRoot.ToJsonString(_jsonSerializerOptions);
 
-        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+        using MemoryStream stream = await _memoryStreamUtil.Get(json, cancellationToken).NoSync();
         ReadResult readResult = await OpenApiDocument.LoadAsync(stream, OpenApiConstants.Json, new OpenApiReaderSettings())
                                                      .NoSync();
 

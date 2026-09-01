@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Soenneker.OpenApi.Converter.Abstract;
 using Soenneker.Utils.File.Registrars;
+using Soenneker.Utils.MemoryStream.Registrars;
 
 namespace Soenneker.OpenApi.Converter.Registrars;
 
@@ -18,6 +19,7 @@ public static class OpenApiConverterRegistrar
     public static IServiceCollection AddOpenApiConverterAsSingleton(this IServiceCollection services)
     {
         services.AddFileUtilAsSingleton();
+        services.AddMemoryStreamUtilAsSingleton();
         services.TryAddSingleton<IOpenApiConverter, OpenApiConverter>();
 
         return services;
@@ -31,6 +33,7 @@ public static class OpenApiConverterRegistrar
     public static IServiceCollection AddOpenApiConverterAsScoped(this IServiceCollection services)
     {
         services.AddFileUtilAsScoped();
+        services.AddMemoryStreamUtilAsScoped();
         services.TryAddScoped<IOpenApiConverter, OpenApiConverter>();
 
         return services;
