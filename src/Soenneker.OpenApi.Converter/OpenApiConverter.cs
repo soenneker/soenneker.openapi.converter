@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -109,9 +110,13 @@ public sealed partial class OpenApiConverter : IOpenApiConverter
 
     private async ValueTask<OpenApiDocument> BuildOpenApiDocument(JsonObject targetRoot, CancellationToken cancellationToken)
     {
-        string json = targetRoot.ToJsonString(_jsonSerializerOptions);
-
-        using MemoryStream stream = await _memoryStreamUtil.Get(json, cancellationToken).NoSync();
+        using MemoryStream stream = await _memoryStreamUtil.Get(cancellationToken).NoSync();
+        var writerOptions = new JsonWriterOptions { Indented = true };
+        using (var writer = stream is IBufferWriter<byte> bufferWriter
+                   ? new Utf8JsonWriter(bufferWriter, writerOptions)
+                   : new Utf8JsonWriter(stream, writerOptions))
+            targetRoot.WriteTo(writer, _jsonSerializerOptions);
+        stream.Position = 0;
         ReadResult readResult = await OpenApiDocument.LoadAsync(stream, OpenApiConstants.Json, new OpenApiReaderSettings())
                                                      .NoSync();
 
