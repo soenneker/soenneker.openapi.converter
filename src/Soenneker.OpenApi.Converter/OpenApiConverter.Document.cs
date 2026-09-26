@@ -63,7 +63,7 @@ public sealed partial class OpenApiConverter
             string url = BuildServerUrl(scheme, host!, basePath);
 
             if (seen.Add(url))
-                servers.Add(new JsonObject { ["url"] = url });
+                servers.Add((JsonNode?)new JsonObject { ["url"] = url });
         }
 
         return servers.Count == 0 ? null : servers;

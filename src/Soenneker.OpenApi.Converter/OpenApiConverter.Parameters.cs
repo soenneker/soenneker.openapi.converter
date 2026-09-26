@@ -59,7 +59,7 @@ public sealed partial class OpenApiConverter
         for (int i = 0; i < parameters.Count; i++)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            result.Add(ConvertParameter(parameters[i], cancellationToken));
+            result.Add((JsonNode?)ConvertParameter(parameters[i], cancellationToken));
         }
 
         return result;

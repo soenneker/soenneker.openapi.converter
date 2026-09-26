@@ -166,7 +166,7 @@ public sealed partial class OpenApiConverter
             properties[propertyName!] = propertySchema;
 
             if (TryGetBooleanValue(parameter, "required", out bool isRequired) && isRequired && requiredNames.Add(propertyName!))
-                required.Add(propertyName);
+                required.Add((JsonNode?)propertyName);
 
             if (TryGetStringValue(parameter, "type", out string? type) &&
                 string.Equals(type, "file", StringComparison.Ordinal))
