@@ -142,7 +142,7 @@ public sealed partial class OpenApiConverter
 
         string trimmed = basePath.Trim();
 
-        if (!trimmed.StartsWith("/", StringComparison.Ordinal))
+        if (!trimmed.StartsWith('/'))
             trimmed = "/" + trimmed;
 
         return trimmed.TrimEnd('/');
